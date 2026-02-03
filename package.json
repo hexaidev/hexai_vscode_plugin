@@ -1,0 +1,178 @@
+{
+  "name": "hexai-awp-connector",
+  "displayName": "HexAI AWP Connector",
+  "description": "Connect to HexAI AWP (Artificial Intelligence Workflow Platform) and execute AI-driven workflows directly from VS Code",
+  "version": "0.1.0",
+  "publisher": "hexai",
+  "license": "MIT",
+  "icon": "resources/icons/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hexaidev/hexai_vscode_plugin"
+  },
+  "homepage": "https://github.com/hexaidev/hexai_vscode_plugin#readme",
+  "bugs": {
+    "url": "https://github.com/hexaidev/hexai_vscode_plugin/issues"
+  },
+  "keywords": [
+    "ai",
+    "workflow",
+    "automation",
+    "hexai",
+    "awp",
+    "artificial intelligence",
+    "machine learning",
+    "chat",
+    "api"
+  ],
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Data Science",
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:hexai.workflowsView",
+    "onView:hexai.historyView",
+    "onView:hexai.chatView",
+    "onCommand:hexai.connect",
+    "onCommand:hexai.disconnect",
+    "onCommand:hexai.listWorkflows",
+    "onCommand:hexai.executeWorkflow",
+    "onCommand:hexai.refreshTemplates",
+    "onCommand:hexai.showOutput",
+    "onCommand:hexai.openChat"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "hexai.connect",
+        "title": "HexAI: Connect to AWP Server"
+      },
+      {
+        "command": "hexai.disconnect",
+        "title": "HexAI: Disconnect from AWP Server"
+      },
+      {
+        "command": "hexai.listWorkflows",
+        "title": "HexAI: List Available Workflows"
+      },
+      {
+        "command": "hexai.executeWorkflow",
+        "title": "HexAI: Execute Workflow"
+      },
+      {
+        "command": "hexai.refreshTemplates",
+        "title": "HexAI: Refresh Workflows",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "hexai.showOutput",
+        "title": "HexAI: Show Output Panel"
+      },
+      {
+        "command": "hexai.openChat",
+        "title": "HexAI: Open Chat Panel",
+        "icon": "$(comment-discussion)"
+      }
+    ],
+    "configuration": {
+      "title": "HexAI AWP",
+      "properties": {
+        "hexai.serverUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "HexAI AWP Server URL"
+        },
+        "hexai.username": {
+          "type": "string",
+          "default": "",
+          "description": "Username for HexAI authentication"
+        },
+        "hexai.autoConnect": {
+          "type": "boolean",
+          "default": false,
+          "description": "Auto-connect on VS Code startup"
+        },
+        "hexai.cacheTimeout": {
+          "type": "number",
+          "default": 300,
+          "description": "Workflow cache timeout in seconds"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "hexai-explorer",
+          "title": "HexAI Workflows",
+          "icon": "resources/icons/hexai.svg"
+        }
+      ]
+    },
+    "views": {
+      "hexai-explorer": [
+        {
+          "id": "hexai.workflowsView",
+          "name": "Workflows"
+        },
+        {
+          "id": "hexai.historyView",
+          "name": "Execution History"
+        },
+        {
+          "id": "hexai.chatView",
+          "name": "Workflows Chat",
+          "type": "webview"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "hexai.refreshTemplates",
+          "when": "view == hexai.workflowsView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "hexai.executeWorkflow",
+          "when": "view == hexai.workflowsView && viewItem == template"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run esbuild-base -- --production",
+    "esbuild-base": "node esbuild.js",
+    "compile": "npm run esbuild-base",
+    "watch": "tsc -watch -p ./",
+    "pretest": "tsc -p ./",
+    "test": "node ./out/test/runTest.js",
+    "lint": "eslint src --ext ts",
+    "package": "npm run compile && vsce package"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.x",
+    "@types/mocha": "^10.x",
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.x",
+    "@typescript-eslint/parser": "^6.x",
+    "@vscode/test-electron": "^2.3.x",
+    "@vscode/vsce": "^2.x",
+    "esbuild": "^0.27.2",
+    "eslint": "^8.x",
+    "glob": "^10.x",
+    "mocha": "^10.x",
+    "typescript": "^5.3.x"
+  },
+  "dependencies": {
+    "axios": "^1.6.x",
+    "form-data": "^4.0.0"
+  }
+}
